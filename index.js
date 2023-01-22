@@ -16,4 +16,5 @@ require('./handler/Event')(client);
 
 (async() => {
     await require('./handler/Commands')(client);
+    
 })()

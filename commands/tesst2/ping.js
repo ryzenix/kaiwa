@@ -1,3 +1,5 @@
+const { SlashCommandSubcommandBuilder } = require('@discordjs/builders');
+
 exports.run = async(client, interaction) => {
     const pingMessage = await interaction.reply({ content: `almost there...`, fetchReply: true });
     const createdTimestamp = pingMessage.createdTimestamp || new Date(pingMessage.timestamp).getTime();
@@ -6,5 +8,9 @@ exports.run = async(client, interaction) => {
 };
 
 exports.info = {
-    name: 'puydfff'
+    name: 'puydfff',
+    description: 'do a few good things',
+    slash: new SlashCommandSubcommandBuilder()
+    .setName('puydfff')
+    .setDescription('do a few good things')
 }

@@ -37,25 +37,34 @@ module.exports = async(client) => {
                         const command = require(`../commands/${directory}/${cmd}`)
                         res.subCommandsGroup.set(command.info.name, command)
                     }
-                };
-                client.logger.info(`Found ${folders.length} folder(s) inside ${directory}`);
-                for (const folder of folders) {
-                    client.logger.info(`Analyzing folder ${folder} folder(s) inside ${directory}`);
-                    const subCategoryData = require(`../commands/${directory}/${folder}/module.json`);
-                    const data = await fs.promises.readdir(`./commands/${directory}/${folder}`);
-                    const cmdFiles = data.filter(file => path.extname(file) === '.js');
-                    client.logger.info(`Found ${cmdFiles.length} individual command(s) inside folder ${folder} inside folder ${directory}`);
-                    if (!cmdFiles.length) continue;
-                    const res = client.commands.get(categoryData.name);
-                    res.subCommandsGroup.set(subCategoryData.name, {
-                        subCommands: new Collection()
-                    });
-                    const subs = res.subCommandsGroup.get(subCategoryData.name);
-                    for (const category of cmdFiles) {
-                        const command = require(`../commands/${directory}/${folder}/${category}`);
-                        subs.subCommands.set(command.info.name, command)
-                    };
+                } else {
+                    client.logger.info(`Found ${folders.length} folder(s) inside ${directory}`);
+                    let subCommandsOfSubCommandGroup = 0;
+                    for (const folder of folders) {
+                        client.logger.info(`Analyzing folder ${folder} folder(s) inside ${directory}`);
+                        const subCategoryData = require(`../commands/${directory}/${folder}/module.json`);
+                        const data = await fs.promises.readdir(`./commands/${directory}/${folder}`);
+                        const cmdFiles = data.filter(file => path.extname(file) === '.js');
+                        subCommandsOfSubCommandGroup += cmdFiles.length;
+                        client.logger.info(`Found ${cmdFiles.length} individual command(s) inside folder ${folder} inside folder ${directory}`);
+                        if (!cmdFiles.length) continue;
+                        const res = client.commands.get(categoryData.name);
+                        res.subCommandsGroup.set(subCategoryData.name, {
+                            subCommands: new Collection()
+                        });
+                        const subs = res.subCommandsGroup.get(subCategoryData.name);
+                        for (const category of cmdFiles) {
+                            const command = require(`../commands/${directory}/${folder}/${category}`);
+                            subs.subCommands.set(command.info.name, command)
+                        };
+                    }
+                    client.logger.info(`Added a total of ${subCommandsOfSubCommandGroup} inside sub command group ${categoryData.name}`);
+                    if (subCommandsOfSubCommandGroup == 0) {
+                        client.logger.info(`Deleting sub command group ${categoryData.name} from collection as there are no command files in any folders.`);
+                        client.commands.delete(categoryData.name);
+                    }
                 }
+
             } catch (error) {
                 client.logger.error(error);
                 continue;
