@@ -1,5 +1,17 @@
 const { Client, Collection } = require("discord.js");
 const winston = require('winston');
+require("winston-daily-rotate-file");
+
+const errorStackFormat = winston.format((info) => {
+    if (info instanceof Error) {
+        return Object.assign({}, info, {
+            stack: info.stack,
+            message: info.message,
+            error: true,
+        });
+    }
+    return info;
+});
 
 module.exports = class Bot extends Client {
     constructor(options) {

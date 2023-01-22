@@ -6,5 +6,5 @@ exports.run = async(client, interaction) => {
 };
 
 exports.info = {
-    name: 'ping'
+    name: 'puydfff'
 }
