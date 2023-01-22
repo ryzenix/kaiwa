@@ -44,7 +44,7 @@ const { REST, Routes } = require('discord.js');
                     console.log(`Found ${folders.length} folder(s) inside ${directory}`);
                     let subCommandsOfSubCommandGroup = 0;
                     for (const folder of folders) {
-                        console.log(`Analyzing folder ${folder} folder(s) inside ${directory}`);
+                        console.log(`Analyzing folder ${folder} inside ${directory}`);
                         const subCategoryData = require(`../commands/${directory}/${folder}/module.json`);
                         const data = await fs.promises.readdir(`./commands/${directory}/${folder}`);
                         const cmdFiles = data.filter(file => path.extname(file) === '.js');
