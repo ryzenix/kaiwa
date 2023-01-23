@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { SlashCommandBuilder, SlashCommandSubcommandGroupBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, SlashCommandSubcommandGroupBuilder } = require('discord.js');
 const { REST, Routes } = require('discord.js');
 
 (async() => {

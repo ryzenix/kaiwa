@@ -2,15 +2,22 @@ const fs = require('fs');
 const path = require('path');
 const { Collection } = require("discord.js");
 
+const Heatsync = require("heatsync");
+
 module.exports = async(client) => {
     client.logger.info(`Initilizing commands files and folders....`);
+
+    const sync = new Heatsync();
+    sync.events.on("error", client.logger.error);
+    sync.events.on("any", (file) => client.logger.info(`${file} was changed`));
+
     const files = await fs.promises.readdir('./commands/');
     const individualCmd = files.filter(file => path.extname(file) === '.js');
 
     if (individualCmd.length) {
         client.logger.info(`Found ${individualCmd.length} individual command(s).`);
         for (const cmd of individualCmd) {
-            const command = require(`../commands/${cmd}`);
+            const command = sync.require(`../commands/${cmd}`);
             client.commands.set(command.info.name, command);
         };
     };
@@ -34,7 +41,7 @@ module.exports = async(client) => {
                     client.logger.info(`Found ${cmds.length} individual command(s) inside ${directory}`);
                     const res = client.commands.get(categoryData.name);
                     for (const cmd of cmds) {
-                        const command = require(`../commands/${directory}/${cmd}`)
+                        const command = sync.require(`../commands/${directory}/${cmd}`)
                         res.subCommandsGroup.set(command.info.name, command)
                     }
                 } else {
@@ -54,7 +61,7 @@ module.exports = async(client) => {
                         });
                         const subs = res.subCommandsGroup.get(subCategoryData.name);
                         for (const category of cmdFiles) {
-                            const command = require(`../commands/${directory}/${folder}/${category}`);
+                            const command = sync.require(`../commands/${directory}/${folder}/${category}`);
                             subs.subCommands.set(command.info.name, command)
                         };
                     }

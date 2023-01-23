@@ -1,16 +1,16 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 
 exports.run = async(client, interaction) => {
-    const pingMessage = await interaction.reply({ content: `almost there...`, fetchReply: true });
+    const pingMessage = await interaction.reply({ content: `Almost there...`, fetchReply: true });
     const createdTimestamp = pingMessage.createdTimestamp || new Date(pingMessage.timestamp).getTime();
     const ping = createdTimestamp - interaction.createdTimestamp;
-    return interaction.editReply(`:ping_pong: pong! took me ${ping}ms, and Discord ${Math.round(client.ws.ping)}ms`);
+    return interaction.editReply(`:ping_pong: Pong! took me \`${ping}ms\` to reply back, and the ping from my location to Discord is \`${Math.round(client.ws.ping)}ms\``);
 };
 
 exports.info = {
     name: 'ping',
-    description: 'ping pong ding dong ching chong',
+    description: 'Ping the bot',
     slash: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('ping pong ding dong ching chong')
+    .setDescription('Ping the bot')
 }

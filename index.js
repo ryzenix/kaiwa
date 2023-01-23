@@ -12,11 +12,6 @@ const Client = require('./structures/Client');
 
 const client = new Client({ 
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
-    ws: {
-        properties: {
-            $browser: "Discord Android",
-        },
-    },
     sweepers: {
         messages: {
             interval: 300,
@@ -27,6 +22,10 @@ const client = new Client({
             }),
         },
     }
+});
+
+process.on("unhandledRejection", (error) => {
+    client.logger.error(error);
 });
 
 client.on("warn", (warn) => client.logger.log("warn", warn));
