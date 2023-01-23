@@ -1,3 +1,4 @@
 module.exports = (client) => {
-    return client.logger.info(`[DISCORD] ${client.user.tag} has logged in!`)
+    client.user.setPresence({ activities: [{ name: 'keeping the hype' }], status: 'online' });
+    return client.logger.info(`[DISCORD] ${client.user.tag} has logged in!`);
 }

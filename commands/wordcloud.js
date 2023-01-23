@@ -1,11 +1,12 @@
 const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const wordsFrequency = require('words-frequency');
 const WordCloud = require('node-wordcloud')();
+const stopWords = require('../assets/stopWords.json')
 
 const { createCanvas } = require('canvas');
 
 exports.run = async(client, interaction) => {
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
     const clientMember = await interaction.guild.members.fetchMe();
     const { channel } = interaction;
     if (!channel.viewable || !channel.permissionsFor(clientMember).has(PermissionsBitField.Flags.ReadMessageHistory)) return interaction.editReply({
@@ -17,13 +18,18 @@ exports.run = async(client, interaction) => {
         content: "There are no message in this channel!"
     });
 
-    const regex = /<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu;
+    const includeStop = interaction.options.getBoolean('include-stopword');
+
 
     const string = [...messages.values()].map(msg => msg.content).join(" ");
-    const filtered = string.split(/<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu).join('').split(/<(?:@[!&]?|#)\d+>/g).join('')
 
-    const list = Object.entries(wordsFrequency(string).data);
-    const sorted = list.sort((a, b) => b[1] - a[1]);
+    const cleanString = string.split(/<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu).join('').split(/<(?:@[!&]?|#)\d+>/g).join('')
+
+
+    const frequentList = Object.entries(wordsFrequency(cleanString).data);
+    const filtered = includeStop ? frequentList : frequentList.filter(a => !stopWords.includes(a[0]))
+    const sorted = filtered.sort((a, b) => b[1] - a[1])
+
 
     const canvas = createCanvas(500, 500);
     const wordcloud = WordCloud(canvas, { list: sorted });
@@ -40,4 +46,9 @@ exports.info = {
     slash: new SlashCommandBuilder()
     .setName('wordcloud')
     .setDescription('Generate a wordcloud base on recent messages in the current channel')
+    .addBooleanOption(option => option
+        .setName('include-stopword')
+        .setDescription('Whether to includes stopword (to, with, a, the,....) in the wordcloud image')
+        .setRequired(false)
+    )
 }
