@@ -37,7 +37,7 @@ exports.run = async(client, interaction) => {
 
     const buffer = canvas.toBuffer();
 
-    return interaction.editReply({ files: [{ attachment: buffer, name: 'pixelize.png' }] });
+    return interaction.editReply({ files: [{ attachment: buffer, name: 'stopword.png' }] });
 };
 
 exports.info = {
