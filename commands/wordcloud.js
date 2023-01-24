@@ -6,7 +6,7 @@ const stopWords = require('../assets/stopWords.json')
 const { createCanvas } = require('canvas');
 
 exports.run = async(client, interaction) => {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply();
     const clientMember = await interaction.guild.members.fetchMe();
     const { channel } = interaction;
     if (!channel.viewable || !channel.permissionsFor(clientMember).has(PermissionsBitField.Flags.ReadMessageHistory)) return interaction.editReply({
