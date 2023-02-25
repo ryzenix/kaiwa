@@ -20,11 +20,12 @@
   "homepage": "https://github.com/ryzenix/kaiwa#readme",
   "dependencies": {
     "canvas": "^2.11.0",
+    "chartjs-node-canvas": "^4.1.6",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "glob": "^8.1.0",
     "heatsync": "^2.4.0",
-    "mongoose": "^6.8.4",
+    "mongoose": "^6.9.1",
     "node-wordcloud": "^0.0.2",
     "stopword": "^2.0.6",
     "winston": "^3.8.2",
