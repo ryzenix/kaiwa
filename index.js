@@ -1,4 +1,5 @@
 require('dotenv').config();
+const mongo = require('./handler/MongoConnect');
 
 const fs = require("fs");
 
@@ -11,7 +12,7 @@ const { GatewayIntentBits, Sweepers } = require('discord.js');
 const Client = require('./structures/Client');
 
 const client = new Client({ 
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
     sweepers: {
         messages: {
             interval: 300,
@@ -33,7 +34,10 @@ client.on("error", (err) => client.logger.log("error", err));
 
 require('./handler/Event')(client);
 
+
+
 (async() => {
     await require('./handler/Commands')(client);
+    await mongo.init(client);
     client.login(process.env.TOKEN).catch((err) => client.logger.log("error", err));
 })()
