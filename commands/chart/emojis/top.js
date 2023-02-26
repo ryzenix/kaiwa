@@ -10,7 +10,7 @@ exports.run = async(client, interaction) => {
         guildId: interaction.guild.id,
     }).sort([
         ["count", "descending"]
-    ]);
+    ]).limit(10);
 
     if (!emojis || !emojis.length) return interaction.editReply({
         content: "There are little to no data to display regarding emojis avaliable on the server!"
