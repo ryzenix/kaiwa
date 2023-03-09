@@ -8,4 +8,12 @@ module.exports = class Util {
             return null;
         };
     };
+    static dayString(index) {
+        const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        return dayOfWeek[index];
+    }
+    static monthString(index) {
+        const monthOfYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return monthOfYear[index];
+    }
 }

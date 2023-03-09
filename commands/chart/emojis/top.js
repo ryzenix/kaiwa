@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 
-const { loadImage, createCanvas } = require('canvas')
+const { loadImage } = require('canvas')
 const emojisDb = require('../../../database/emojis.js');
 
 exports.run = async(client, interaction) => {
@@ -16,11 +16,10 @@ exports.run = async(client, interaction) => {
         content: "There are little to no data to display regarding emojis avaliable on the server!"
     });
 
-    const fetchedEmojis = await Promise.all(emojis.map(async (emoji) => {
+    const fetchedEmojis = await Promise.all(emojis.map(async(emoji) => {
         const guildEmoji = await interaction.guild.emojis.fetch(emoji.emojiId).catch(() => null);
         if (!guildEmoji) {
             await emojisDb.findOneAndDelete({
-                guildId: interaction.guild.id,
                 emojiId: emoji.emojiId
             });
             return null;
@@ -33,24 +32,24 @@ exports.run = async(client, interaction) => {
     if (fetchedEmojis.filter(emoji => emoji).length < 1) return interaction.editReply({
         content: "A number of emojis were deleted from the server, and there are little to no data to display regarding emojis avaliable on the server!"
     });
-    
+
 
     const width = 400;
     const height = 400;
     const backgroundColour = 'white';
-    const canvas = new ChartJSNodeCanvas({ width, height, backgroundColour});
+    const canvas = new ChartJSNodeCanvas({ width, height, backgroundColour });
 
     const image = await canvas.renderToBuffer({
         type: "bar",
         plugins: [{
             afterDraw: chart => {
-                var ctx = chart.ctx; 
+                var ctx = chart.ctx;
                 var xAxis = chart.scales.x;
                 var yAxis = chart.scales.y;
-                xAxis.ticks.forEach((value, index) => {  
-                    var x = xAxis.getPixelForTick(index);   
+                xAxis.ticks.forEach((value, index) => {
+                    var x = xAxis.getPixelForTick(index);
                     ctx.drawImage(fetchedEmojis[index].imageData, x - 12, yAxis.bottom + 10);
-                });      
+                });
             }
         }],
         data: {
@@ -65,12 +64,12 @@ exports.run = async(client, interaction) => {
             scales: {
                 x: {
                     ticks: {
-                        padding: 20 
+                        padding: 20
                     }
                 },
-                y: { 
+                y: {
                     ticks: {
-                      beginAtZero: true
+                        beginAtZero: true
                     }
                 },
             }
@@ -83,6 +82,6 @@ exports.info = {
     name: 'top',
     description: 'Display top 10 most used emojis in the server',
     slash: new SlashCommandSubcommandBuilder()
-    .setName('top')
-    .setDescription('Display top 10 most used emojis in the server')
+        .setName('top')
+        .setDescription('Display top 10 most used emojis in the server')
 }
