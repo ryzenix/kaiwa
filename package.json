@@ -25,6 +25,7 @@
     "dotenv": "^16.0.3",
     "glob": "^8.1.0",
     "heatsync": "^2.4.0",
+    "luxon": "^3.3.0",
     "mongoose": "^6.9.1",
     "node-wordcloud": "^0.0.2",
     "stopword": "^2.0.6",
