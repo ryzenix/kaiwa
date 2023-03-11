@@ -9,8 +9,7 @@ exports.run = async(client, interaction) => {
 
 exports.info = {
     name: 'ping',
-    description: 'Ping the bot',
     slash: new SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Ping the bot')
+        .setName('ping')
+        .setDescription('Ping the bot')
 }

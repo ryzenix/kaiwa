@@ -2,35 +2,40 @@ const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 
 const { loadImage } = require('canvas')
-const emojisDb = require('../../../database/emojis.js');
+const memberVoiceDb = require('../../../database/memberVoice.js');
+const moment = require('moment');
+require('moment-duration-format')
 
 exports.run = async(client, interaction) => {
     await interaction.deferReply();
-    const emojis = await emojisDb.find({
+    const members = await memberVoiceDb.find({
         guildId: interaction.guild.id,
     }).sort([
-        ["count", "descending"]
+        ["duration", "descending"]
     ]).limit(10);
 
-    if (!emojis || !emojis.length) return interaction.editReply({
-        content: "There are little to no data to display regarding emojis avaliable on the server!"
+    if (!members || !members.length) return interaction.editReply({
+        content: "There are little to no data to display!"
     });
 
-    const fetchedEmojis = await Promise.all(emojis.map(async(emoji) => {
-        const guildEmoji = await interaction.guild.emojis.fetch(emoji.emojiId).catch(() => null);
-        if (!guildEmoji) {
-            await emojisDb.findOneAndDelete({
-                emojiId: emoji.emojiId
+    const fetchedMembers = await Promise.all(members.map(async(member) => {
+        const guildMember = await interaction.guild.members.fetch(member.memberId).catch(() => null);
+        if (!guildMember) {
+            await memberVoiceDb.findOneAndDelete({
+                memberId: emoji.emojiId
             });
             return null;
         }
-        const imageData = await loadImage(`${guildEmoji.url}?size=16`);
-        return { name: guildEmoji.name, count: emoji.count, imageData };
+        const imageData = await loadImage(guildMember.displayAvatarURL({
+            size: 16,
+            extension: 'png'
+        }));
+        return { name: guildMember.nickname || guildMember.user.tag, duration: member.duration, imageData };
     })).then(arr => arr.splice(0, 9));
 
 
-    if (fetchedEmojis.filter(emoji => emoji).length < 1) return interaction.editReply({
-        content: "A number of emojis were deleted from the server, and there are little to no data to display regarding emojis avaliable on the server!"
+    if (fetchedMembers.filter(emoji => emoji).length < 1) return interaction.editReply({
+        content: "There are little to no data to display!"
     });
 
 
@@ -48,15 +53,15 @@ exports.run = async(client, interaction) => {
                 var yAxis = chart.scales.y;
                 xAxis.ticks.forEach((value, index) => {
                     var x = xAxis.getPixelForTick(index);
-                    ctx.drawImage(fetchedEmojis[index].imageData, x - 12, yAxis.bottom + 10);
+                    ctx.drawImage(fetchedMembers[index].imageData, x - 12, yAxis.bottom + 10);
                 });
             }
         }],
         data: {
-            labels: fetchedEmojis.map(emoji => `:${emoji.name}:`),
+            labels: fetchedMembers.map(member => member.name),
             datasets: [{
-                label: `Top 10 most used emojis in ${interaction.guild.name}`,
-                data: fetchedEmojis.map(emoji => emoji.count),
+                label: `Top 10 members with most time spent in voice chat`,
+                data: fetchedMembers.map(member => member.duration),
                 backgroundColor: ['red', 'blue', 'green', 'lightgray']
             }]
         },
@@ -72,7 +77,10 @@ exports.run = async(client, interaction) => {
                 },
                 y: {
                     ticks: {
-                        beginAtZero: true
+                        precision: 0,
+                        callback: (value) => {
+                            return moment.duration(value).format('H[h] m[m] s[s]')
+                        },
                     },
                     grid: {
                         color: "#36A2EB"
@@ -88,5 +96,5 @@ exports.info = {
     name: 'top',
     slash: new SlashCommandSubcommandBuilder()
         .setName('top')
-        .setDescription('Display top 10 most used emojis in the server')
+        .setDescription('Display top 10 members with most time spent in voice chat')
 }

@@ -13,14 +13,13 @@ exports.run = async(client, interaction) => {
     }).sort([
         ["weekNumber", "ascending"]
     ]);
-    console.log(data);
 
     if (!data || !data.length) return interaction.editReply({
         content: "There are little to no data to display!"
     });
 
 
-    const width = 400;
+    const width = 700;
     const height = 400;
     const backgroundColour = 'white';
     const canvas = new ChartJSNodeCanvas({ width, height, backgroundColour });
@@ -30,10 +29,34 @@ exports.run = async(client, interaction) => {
         data: {
             labels: data.map(week => week.title),
             datasets: [{
-                label: `Weekly messages stats for ${interaction.guild.name} in ${monthString(currentTime.month)}`,
+                label: `Messages sent per week in ${monthString(currentTime.month)}`,
                 data: data.map(week => week.count),
-                backgroundColor: ['red', 'blue', 'green', 'lightgray']
+                backgroundColor: ['red'],
+                borderColor: "red",
+                fill: false
             }]
+        },
+        options: {
+            scales: {
+                y: {
+                    suggestedMin: 0,
+                    ticks: {
+                        precision: 0
+                    },
+                    grid: {
+                        color: "#36A2EB"
+                    },
+                    title: {
+                        display: true,
+                        text: 'Message(s)'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: "#36A2EB"
+                    }
+                }
+            }
         }
     });
     return interaction.editReply({ files: [{ attachment: image, name: 'weekly.png' }], content: "Update in UTC timezone" });
@@ -41,8 +64,7 @@ exports.run = async(client, interaction) => {
 
 exports.info = {
     name: 'weekly',
-    description: 'Display a chart with the amount of messages sent in the server per week for the past month',
     slash: new SlashCommandSubcommandBuilder()
         .setName('weekly')
-        .setDescription('display a chart with the amount of messages sent in the server per week for the past month')
+        .setDescription('Weekly report for the amount of messages sent in the server in the past month')
 }

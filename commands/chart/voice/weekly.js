@@ -1,16 +1,19 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-const dailyDb = require('../../../database/messagesDaily.js');
+const monthDb = require('../../../database/voiceWeekly.js');
+const { monthString } = require('../../../handler/Util');
 const { DateTime } = require('luxon');
+const moment = require('moment');
+require('moment-duration-format')
 
 exports.run = async(client, interaction) => {
     await interaction.deferReply();
     const currentTime = DateTime.now().setZone('utc');
-    const data = await dailyDb.find({
-        weekNumber: currentTime.weekNumber,
+    const data = await monthDb.find({
+        monthNumber: currentTime.month,
         guildId: interaction.guild.id,
     }).sort([
-        ["dayNumber", "ascending"]
+        ["weekNumber", "ascending"]
     ]);
 
     if (!data || !data.length) return interaction.editReply({
@@ -28,8 +31,8 @@ exports.run = async(client, interaction) => {
         data: {
             labels: data.map(date => date.title),
             datasets: [{
-                label: `Messages sent per day for the last week`,
-                data: data.map(date => date.count),
+                label: `Time spent in voice chat during ${monthString(currentTime.month)}`,
+                data: data.map(date => date.duration),
                 backgroundColor: ['red'],
                 borderColor: "red",
                 fill: false
@@ -40,15 +43,16 @@ exports.run = async(client, interaction) => {
                 y: {
                     suggestedMin: 0,
                     ticks: {
-                        precision: 0
+                        precision: 0,
+                        callback: (value) => {
+                            return moment.duration(value).format('H[h] m[m] s[s]')
+                        },
+                        autoSkipPadding: 20,
+                        autoSkip: true
                     },
                     grid: {
                         color: "#36A2EB"
                     },
-                    title: {
-                        display: true,
-                        text: 'Message(s)'
-                    }
                 },
                 x: {
                     grid: {
@@ -58,12 +62,12 @@ exports.run = async(client, interaction) => {
             }
         }
     });
-    return interaction.editReply({ files: [{ attachment: image, name: 'daily.png' }], content: "Update in UTC timezone" });
+    return interaction.editReply({ files: [{ attachment: image, name: 'weekly.png' }], content: "Update in UTC timezone" });
 };
 
 exports.info = {
-    name: 'daily',
+    name: 'weekly',
     slash: new SlashCommandSubcommandBuilder()
-        .setName('daily')
-        .setDescription('Daily report for the amount of messages sent in server in the past week')
+        .setName('weekly')
+        .setDescription('Weekly report for the amount of time sent in voice channels for the past month')
 }

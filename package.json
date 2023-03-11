@@ -1,36 +1,38 @@
 {
-  "name": "kaiwa",
-  "version": "1.0.0",
-  "description": "Kaiwa is a bot that analyzes your server members's text conversation ",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "register": "node handler/RegisterSlash.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ryzenix/kaiwa.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ryzenix/kaiwa/issues"
-  },
-  "homepage": "https://github.com/ryzenix/kaiwa#readme",
-  "dependencies": {
-    "canvas": "^2.11.0",
-    "chartjs-node-canvas": "^4.1.6",
-    "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3",
-    "glob": "^9.2.1",
-    "heatsync": "^2.4.0",
-    "luxon": "^3.3.0",
-    "mongoose": "^7.0.1",
-    "node-wordcloud": "^0.0.2",
-    "stopword": "^2.0.7",
-    "winston": "^3.8.2",
-    "winston-daily-rotate-file": "^4.7.1",
-    "words-frequency": "^1.1.1"
-  }
+    "name": "kaiwa",
+    "version": "1.0.0",
+    "description": "Kaiwa is a bot that analyzes your server members's text conversation ",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js",
+        "register": "node handler/RegisterSlash.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ryzenix/kaiwa.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ryzenix/kaiwa/issues"
+    },
+    "homepage": "https://github.com/ryzenix/kaiwa#readme",
+    "dependencies": {
+        "canvas": "^2.11.0",
+        "chartjs-node-canvas": "^4.1.6",
+        "discord.js": "^14.7.1",
+        "dotenv": "^16.0.3",
+        "glob": "^8.1.0",
+        "heatsync": "^2.4.0",
+        "luxon": "^3.3.0",
+        "moment": "^2.29.4",
+        "moment-duration-format": "^2.3.2",
+        "mongoose": "^7.0.1",
+        "node-wordcloud": "^0.0.2",
+        "stopword": "^2.0.7",
+        "winston": "^3.8.2",
+        "winston-daily-rotate-file": "^4.7.1",
+        "words-frequency": "^1.1.1"
+    }
 }

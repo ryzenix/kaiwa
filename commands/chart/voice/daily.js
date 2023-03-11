@@ -1,7 +1,9 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-const dailyDb = require('../../../database/messagesDaily.js');
+const dailyDb = require('../../../database/voiceDaily.js');
 const { DateTime } = require('luxon');
+const moment = require('moment');
+require('moment-duration-format')
 
 exports.run = async(client, interaction) => {
     await interaction.deferReply();
@@ -28,8 +30,8 @@ exports.run = async(client, interaction) => {
         data: {
             labels: data.map(date => date.title),
             datasets: [{
-                label: `Messages sent per day for the last week`,
-                data: data.map(date => date.count),
+                label: `Time spent in voice chat in the last week`,
+                data: data.map(date => date.duration),
                 backgroundColor: ['red'],
                 borderColor: "red",
                 fill: false
@@ -40,15 +42,16 @@ exports.run = async(client, interaction) => {
                 y: {
                     suggestedMin: 0,
                     ticks: {
-                        precision: 0
+                        precision: 0,
+                        callback: (value) => {
+                            return moment.duration(value).format('H[h] m[m] s[s]')
+                        },
+                        autoSkipPadding: 20,
+                        autoSkip: true
                     },
                     grid: {
                         color: "#36A2EB"
                     },
-                    title: {
-                        display: true,
-                        text: 'Message(s)'
-                    }
                 },
                 x: {
                     grid: {
@@ -65,5 +68,5 @@ exports.info = {
     name: 'daily',
     slash: new SlashCommandSubcommandBuilder()
         .setName('daily')
-        .setDescription('Daily report for the amount of messages sent in server in the past week')
+        .setDescription('Daily report for the amount of time sent in voice channels in the past week')
 }
