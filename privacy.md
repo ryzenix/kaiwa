@@ -46,7 +46,7 @@ Kaiwa Bot will take all the steps reasonably necessary to ensure that your data 
 The security of your data is important to us but remember that no method of transmission over the Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.
 
 ## Your Data Protection Rights under the General Data Protection Regulation (GDPR)
-If you are a resident of the European Economic Area (EEA), you have certain data protection rights. Melms Media LLC aims to take reasonable steps to allow you to correct, amend, delete or limit the use of your Personal Data.
+If you are a resident of the European Economic Area (EEA), you have certain data protection rights. Kaiwa Bot aims to take reasonable steps to allow you to correct, amend, delete or limit the use of your Personal Data.
 
 If you wish to be informed about what Personal Data we hold about you and if you want it to be removed from our systems, please contact us.
 
