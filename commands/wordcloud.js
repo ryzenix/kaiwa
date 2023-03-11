@@ -42,13 +42,12 @@ exports.run = async(client, interaction) => {
 
 exports.info = {
     name: 'wordcloud',
-    description: 'Generate a wordcloud base on recent messages in the current channel',
     slash: new SlashCommandBuilder()
-    .setName('wordcloud')
-    .setDescription('Generate a wordcloud base on recent messages in the current channel')
-    .addBooleanOption(option => option
-        .setName('include-stopword')
-        .setDescription('Whether to includes stopword (to, with, a, the,....) in the wordcloud image')
-        .setRequired(false)
-    )
+        .setName('wordcloud')
+        .setDescription('Generate a wordcloud base on recent messages in the current channel')
+        .addBooleanOption(option => option
+            .setName('include-stopword')
+            .setDescription('Whether to includes stopword (to, with, a, the,....) in the wordcloud image')
+            .setRequired(false)
+        )
 }

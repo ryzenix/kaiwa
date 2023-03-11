@@ -1,6 +1,6 @@
 const emojisDb = require('../database/emojis.js');
 const dailyDb = require('../database/messagesDaily.js');
-const { dayString, monthString } = require('../handler/Util');
+const { dayString } = require('../handler/Util');
 const { DateTime } = require('luxon');
 const monthlyDb = require('../database/messagesWeekly.js');
 
@@ -30,7 +30,7 @@ module.exports = async(client, message) => {
             });
         }
     };
-    const currentDate = DateTime.now().setZone('utc');;
+    const currentDate = DateTime.now().setZone('utc');
     await dailyDb.findOneAndUpdate({
         weekNumber: currentDate.weekNumber,
         dayNumber: currentDate.day,
