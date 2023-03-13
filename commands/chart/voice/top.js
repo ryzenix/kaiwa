@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 
-const { loadImage } = require('canvas')
+const { loadImage } = require('canvas');
 const memberVoiceDb = require('../../../database/memberVoice.js');
 const moment = require('moment');
 require('moment-duration-format')
@@ -25,11 +25,11 @@ exports.run = async(client, interaction) => {
                 memberId: emoji.emojiId
             });
             return null;
-        }
-        const imageData = await loadImage(guildMember.displayAvatarURL({
-            size: 16,
+        };
+        const imageLink = guildMember.displayAvatarURL({
             extension: 'png'
-        }));
+        });
+        const imageData = await loadImage(imageLink);
         return { name: guildMember.nickname || guildMember.user.tag, duration: member.duration, imageData };
     })).then(arr => arr.splice(0, 9));
 
@@ -53,7 +53,7 @@ exports.run = async(client, interaction) => {
                 var yAxis = chart.scales.y;
                 xAxis.ticks.forEach((value, index) => {
                     var x = xAxis.getPixelForTick(index);
-                    ctx.drawImage(fetchedMembers[index].imageData, x - 12, yAxis.bottom + 10);
+                    ctx.drawImage(fetchedMembers[index].imageData, x - 12, yAxis.bottom + 10, 16, 16);
                 });
             }
         }],

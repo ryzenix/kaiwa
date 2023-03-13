@@ -24,7 +24,7 @@ exports.run = async(client, interaction) => {
             });
             return null;
         }
-        const imageData = await loadImage(`${guildEmoji.url}?size=16`);
+        const imageData = await loadImage(guildEmoji.url);
         return { name: guildEmoji.name, count: emoji.count, imageData };
     })).then(arr => arr.splice(0, 9));
 
@@ -48,7 +48,7 @@ exports.run = async(client, interaction) => {
                 var yAxis = chart.scales.y;
                 xAxis.ticks.forEach((value, index) => {
                     var x = xAxis.getPixelForTick(index);
-                    ctx.drawImage(fetchedEmojis[index].imageData, x - 12, yAxis.bottom + 10);
+                    ctx.drawImage(fetchedEmojis[index].imageData, x - 12, yAxis.bottom + 10, 16, 16);
                 });
             }
         }],
