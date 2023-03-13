@@ -66,7 +66,7 @@ exports.run = async(client, interaction) => {
             }
         }
     });
-    return interaction.editReply({ files: [{ attachment: image, name: 'monthly.png' }], content: "Update in UTC timezone" });
+    return interaction.editReply({ files: [{ attachment: image, name: 'monthly.png' }], content: "Chart shown in [UTC Time](https://www.utctime.net/)." });
 };
 
 exports.info = {

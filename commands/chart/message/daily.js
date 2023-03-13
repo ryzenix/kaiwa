@@ -7,11 +7,11 @@ exports.run = async(client, interaction) => {
     await interaction.deferReply();
     const currentTime = DateTime.now().setZone('utc');
     const data = await dailyDb.find({
-        weekNumber: currentTime.weekNumber,
+        monthNumber: currentTime.month,
         guildId: interaction.guild.id,
     }).sort([
         ["dayNumber", "ascending"]
-    ]);
+    ]).limit(7);
 
     if (!data || !data.length) return interaction.editReply({
         content: "There are little to no data to display!"
@@ -28,7 +28,7 @@ exports.run = async(client, interaction) => {
         data: {
             labels: data.map(date => date.title),
             datasets: [{
-                label: `Messages sent per day for the last week`,
+                label: `Daily messages stats for the last 7 days`,
                 data: data.map(date => date.count),
                 backgroundColor: ['red'],
                 borderColor: "red",
@@ -58,7 +58,7 @@ exports.run = async(client, interaction) => {
             }
         }
     });
-    return interaction.editReply({ files: [{ attachment: image, name: 'daily.png' }], content: "Update in UTC timezone" });
+    return interaction.editReply({ files: [{ attachment: image, name: 'daily.png' }], content: "Chart shown in [UTC Time](https://www.utctime.net/)." });
 };
 
 exports.info = {
