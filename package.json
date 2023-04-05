@@ -19,7 +19,7 @@
     },
     "homepage": "https://github.com/ryzenix/kaiwa#readme",
     "dependencies": {
-        "canvas": "^2.11.0",
+        "canvas": "^2.11.2",
         "chartjs-node-canvas": "^4.1.6",
         "discord.js": "^14.9.0",
         "dotenv": "^16.0.3",
