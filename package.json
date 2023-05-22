@@ -28,7 +28,7 @@
         "luxon": "^3.3.0",
         "moment": "^2.29.4",
         "moment-duration-format": "^2.3.2",
-        "mongoose": "^7.0.3",
+        "mongoose": "^7.2.0",
         "node-wordcloud": "^0.0.2",
         "stopword": "^2.0.8",
         "winston": "^3.8.2",
