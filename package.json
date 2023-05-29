@@ -31,7 +31,7 @@
         "mongoose": "^7.0.3",
         "node-wordcloud": "^0.0.2",
         "stopword": "^2.0.8",
-        "winston": "^3.8.2",
+        "winston": "^3.9.0",
         "winston-daily-rotate-file": "^4.7.1",
         "words-frequency": "^1.1.1"
     }
